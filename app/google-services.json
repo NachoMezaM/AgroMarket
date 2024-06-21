@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "516453220889",
+    "project_id": "agromarket-e0b4f",
+    "storage_bucket": "agromarket-e0b4f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:516453220889:android:6b7b9c39ebd6eefa882088",
+        "android_client_info": {
+          "package_name": "com.example.agromarket"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC19K4Myd-3vOhFiSQh6R5u6laiJ1xQlIo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -2,11 +2,14 @@ package com.example.agromarket
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.firebase.database.ktx.*
+import com.google.firebase.ktx.Firebase
 
 class isesion : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,5 +29,12 @@ class isesion : AppCompatActivity() {
             )
             startActivity(intent)
         }
+    }
+
+    fun sendData(view: View) {
+        val database = Firebase.database
+        val myRef = database.getReference("message")
+
+        myRef.setValue("Hello, World!")
     }
 }

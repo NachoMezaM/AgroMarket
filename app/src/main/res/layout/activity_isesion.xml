@@ -25,6 +25,7 @@
             android:layout_height="65dp"
             android:backgroundTint="#FEBC59"
             android:text="Iniciar Sesión"
+            android:onClick="sendData"
             android:textColor="#CF2026"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
