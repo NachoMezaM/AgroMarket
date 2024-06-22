@@ -18,13 +18,22 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        val btnlogin = findViewById<Button>(R.id.login)
-        btnlogin.setOnClickListener{
+        val btnloginven = findViewById<Button>(R.id.registrar)
+        btnloginven.setOnClickListener{
             val intent = Intent(
                 this@MainActivity,
                 isesion::class.java
             )
             startActivity(intent)
         }
+        val btnregister = findViewById<Button>(R.id.register)
+        btnregister.setOnClickListener{
+            val intent = Intent(
+                this@MainActivity,
+                register::class.java
+            )
+            startActivity(intent)
+        }
+
     }
 }

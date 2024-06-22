@@ -38,7 +38,6 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
     // Add the dependency for the Realtime Database library
     // When using the BoM, you don't specify versions in Firebase library dependencies
-
     implementation("androidx.core:core-ktx:1.13.1")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
