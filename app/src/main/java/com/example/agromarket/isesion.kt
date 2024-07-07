@@ -65,7 +65,9 @@ class isesion : AppCompatActivity() {
                         if (userType == "Comprador") {
                             startActivity(Intent(this@isesion, MainComprador::class.java))
                         } else if (userType == "Vendedor") {
-                            startActivity(Intent(this@isesion, mainvendedor::class.java))
+                            intent = Intent(this@isesion, mainvendedor::class.java)
+                            intent.putExtra("correo", correo)
+                            startActivity(intent)
                         }
                         finish()
                     } else {
