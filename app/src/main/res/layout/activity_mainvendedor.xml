@@ -41,48 +41,13 @@
         tools:layout_editor_absoluteX="-3dp">
 
         <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="390dp"
-            android:layout_height="571dp"
+            android:id="@+id/productoLO"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             tools:layout_editor_absoluteX="1dp"
             tools:layout_editor_absoluteY="1dp">
 
-            <TextView
-                android:id="@+id/categoria"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Categoria"
-                android:textSize="20sp" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="127dp">
-
-                <TextView
-                    android:id="@+id/tituloproducto"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Producto"
-                    android:textSize="20sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0" />
-
-                <TextView
-                    android:id="@+id/textView7"
-                    android:layout_width="288dp"
-                    android:layout_height="64dp"
-                    android:layout_marginTop="20dp"
-                    android:text="Descripcion"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.132"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tituloproducto" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
 
@@ -97,8 +62,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.945"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+            app:layout_constraintTop_toBottomOf="@+id/productoLO"
             app:layout_constraintVertical_bias="0.407" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -112,7 +112,6 @@ class agregarproducto : AppCompatActivity() {
 
     fun sendProd(downloadUrl: String) {
         // new code here
-        val codigo = correo + nombreET.text.toString()
         val nombre = nombreET.text.toString()
         val desc = descET.text.toString()
         val precio = precioET.text.toString()
@@ -129,7 +128,8 @@ class agregarproducto : AppCompatActivity() {
         }
 
         //Revisar existencia de producto
-        myRef.child(codigo).addListenerForSingleValueEvent(object : ValueEventListener {
+
+        myRef.child(correo).child(nombre).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.exists()) {
                     // El producto ya existe
@@ -141,18 +141,18 @@ class agregarproducto : AppCompatActivity() {
                 } else {
                     // El producto no existe, crear el nuevo producto
                     val userMap = mapOf(
-                        "Correo" to correo,
                         "Nombre" to nombre,
                         "Precio" to precio,
                         "Descripcion" to desc,
                         "Estado" to estado,
                         "Imagen" to downloadUrl
                     )
-                    myRef.child(codigo).setValue(userMap)
+                    myRef.child(correo).child(nombre).setValue(userMap)
                     Toast.makeText(this@agregarproducto, "Producto creado exitosamente", Toast.LENGTH_SHORT)
                         .show()
-                    val intentprod = Intent(this@agregarproducto, mainvendedor::class.java)
-                    startActivity(intentprod)
+                    var intent2 = Intent(this@agregarproducto, mainvendedor::class.java)
+                    intent2.putExtra("correo", correo)
+                    startActivity(intent2)
 
                 }
             }
