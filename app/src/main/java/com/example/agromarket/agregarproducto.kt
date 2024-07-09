@@ -4,9 +4,11 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -59,6 +61,12 @@ class agregarproducto : AppCompatActivity() {
         descET = findViewById(R.id.descET)
         precioET = findViewById(R.id.precioET)
 
+        val spinner = findViewById<Spinner>(R.id.spinner)
+        val opciones = arrayOf("Verduras", "Frutas", "Frutos Secos")
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, opciones)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = adapter
+
         storageRef = FirebaseStorage.getInstance().reference
 
         subir.setOnClickListener(){
@@ -67,7 +75,9 @@ class agregarproducto : AppCompatActivity() {
         }
 
         volver.setOnClickListener(){
-            startActivity(Intent(this@agregarproducto, mainvendedor::class.java))
+            var intent2 = Intent(this@agregarproducto, mainvendedor::class.java)
+            intent2.putExtra("correo", correo)
+            startActivity(intent2)
         }
 
         enviar.setOnClickListener(){
@@ -93,17 +103,28 @@ class agregarproducto : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == IMAGE_REQUEST_CODE && resultCode == RESULT_OK){
-            imagenET.setImageURI(data?.data)
-            imagenUri = data?.data!!
+            data?.data?.let{
+                imagenUri = it
+                imagenET.setImageURI(it)
+            }
+
         }
     }
 
     private fun uploadImage() {
+        if (imagenUri == null) {
+            Toast.makeText(this, "Por favor, seleccione una imagen primero.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val imagenRef = storageRef.child("productos/${nombreET.text.toString()}.jpg")
-        imagenRef.putFile(imagenUri)
+        imagenRef.putFile(imagenUri!!)
             .addOnSuccessListener { taskSnapshot ->
-                val downloadUrl = taskSnapshot.storage.downloadUrl.toString()
-                sendProd(downloadUrl)
+                // Correctamente se obtiene la URL de descarga aquí
+                taskSnapshot.storage.downloadUrl.addOnSuccessListener { uri ->
+                    val downloadUrl = uri.toString()
+                    sendProd(downloadUrl)
+                }
             }
             .addOnFailureListener { e ->
                 Toast.makeText(this, "Error al subir la imagen: ${e.message}", Toast.LENGTH_SHORT).show()
@@ -116,6 +137,7 @@ class agregarproducto : AppCompatActivity() {
         val desc = descET.text.toString()
         val precio = precioET.text.toString()
         val estado = "Activo"
+
 
         //path
         val database = Firebase.database
@@ -145,7 +167,8 @@ class agregarproducto : AppCompatActivity() {
                         "Precio" to precio,
                         "Descripcion" to desc,
                         "Estado" to estado,
-                        "Imagen" to downloadUrl
+                        "Imagen" to downloadUrl,
+                        "Categoria" to findViewById<Spinner>(R.id.spinner).selectedItem.toString()
                     )
                     myRef.child(correo).child(nombre).setValue(userMap)
                     Toast.makeText(this@agregarproducto, "Producto creado exitosamente", Toast.LENGTH_SHORT)

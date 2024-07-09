@@ -3,6 +3,7 @@ package com.example.agromarket
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -27,6 +28,7 @@ class mainvendedor : AppCompatActivity() {
     private lateinit var nombreTiendaTV: TextView
 
     private lateinit var productosLayOut: LinearLayout
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -59,6 +61,14 @@ class mainvendedor : AppCompatActivity() {
             intent2.putExtra("correo", correo)
             startActivity(intent2)
         }
+        //OPCIONES
+        val opcion: Button = findViewById(R.id.opciones)
+        opcion.setOnClickListener(){
+            var intent2 = Intent(this@mainvendedor, opciones::class.java)
+            intent2.putExtra("correo", correo)
+            startActivity(intent2)
+        }
+
     }
 
 
@@ -89,12 +99,13 @@ class mainvendedor : AppCompatActivity() {
 
 
     //Funcion llamar productos
-    private fun buscarProductos(correo: String){
+    private fun buscarProductos(correo: String) {
         val userProductsRef = databaseprod.child(correo)
         userProductsRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
                     for (productSnapshot in snapshot.children) {
+                        findViewById<ImageView>(R.id.sinprod).visibility = View.GONE
                         val nombre = productSnapshot.child("Nombre").getValue(String::class.java)
                         val precio = productSnapshot.child("Precio").getValue(String::class.java)
                         val descripcion = productSnapshot.child("Descripcion").getValue(String::class.java)
@@ -108,6 +119,8 @@ class mainvendedor : AppCompatActivity() {
                     }
                 } else {
                     Toast.makeText(this@mainvendedor, "No se encontraron productos", Toast.LENGTH_SHORT).show()
+                    findViewById<ImageView>(R.id.sinprod).visibility = View.VISIBLE
+
                 }
             }
 
@@ -117,23 +130,22 @@ class mainvendedor : AppCompatActivity() {
         })
     }
 //Vista
-    private fun agregarProductoVista(nombre: String, precio: String, descripcion: String, estado: String, imagen: String) {
-        val inflater = LayoutInflater.from(this)
-        val productoView = inflater.inflate(R.layout.producto_item, productosLayOut, false)
+private fun agregarProductoVista(nombre: String, precio: String, descripcion: String, estado: String, imagen: String) {
+    val inflater = LayoutInflater.from(this)
+    val productoView = inflater.inflate(R.layout.producto_item, productosLayOut, false)
 
-        val nombreTextView = productoView.findViewById<TextView>(R.id.nombreProductoTextView)
-        val precioTextView = productoView.findViewById<TextView>(R.id.precioProductoTextView)
-        val descripcionTextView = productoView.findViewById<TextView>(R.id.descripcionProductoTextView)
-        val estadoSwitch = productoView.findViewById<Switch>(R.id.estadoProductoSwitch)
-        val imagenImageView = productoView.findViewById<ImageView>(R.id.imagenProductoImageView)
+    val nombreTextView = productoView.findViewById<TextView>(R.id.nombreProductoTextView)
+    val precioTextView = productoView.findViewById<TextView>(R.id.precioProductoTextView)
+    val descripcionTextView = productoView.findViewById<TextView>(R.id.descripcionProductoTextView)
+    val estadoSwitch = productoView.findViewById<Switch>(R.id.estadoProductoSwitch)
+    val imagenImageView = productoView.findViewById<ImageView>(R.id.imagenProductoImageView)
 
-
-        nombreTextView.text = nombre
-        precioTextView.text = precio
-        descripcionTextView.text = descripcion
-        estadoSwitch.isChecked = estado == "Activo"
-        Picasso.get().load(imagen).into(imagenImageView)
+    nombreTextView.text = nombre
+    precioTextView.text = precio
+    descripcionTextView.text = descripcion
+    estadoSwitch.isChecked = estado == "Activo"
+    Picasso.get().load(imagen).into(imagenImageView)
     productosLayOut.addView(productoView)
-    }
+}
 
     }
