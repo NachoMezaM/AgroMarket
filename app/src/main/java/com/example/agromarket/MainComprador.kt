@@ -1,13 +1,10 @@
 package com.example.agromarket
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -19,8 +16,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
 
 class MainComprador : AppCompatActivity() {
@@ -36,7 +31,7 @@ class MainComprador : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        productoslay = findViewById(R.id.ProductosLayOT)
+        productoslay = findViewById(R.id.productsLayOT)
         databaseprod = FirebaseDatabase.getInstance().getReference("productos")
     }
     //buscar
