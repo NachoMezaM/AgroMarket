@@ -15,26 +15,26 @@
         android:theme="@style/Theme.AgroMarket"
         tools:targetApi="31">
         <activity
-            android:name=".opciones"
+            android:name="com.unach.agromarket.opciones"
             android:exported="false" />
         <activity
-            android:name=".agregarproducto"
+            android:name="com.unach.agromarket.agregarproducto"
             android:exported="false" />
         <activity
-            android:name=".MainComprador"
+            android:name="com.unach.agromarket.MainComprador"
             android:exported="false" />
         <activity
-            android:name=".register"
+            android:name="com.unach.agromarket.register"
             android:exported="false"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".mainvendedor"
+            android:name="com.unach.agromarket.mainvendedor"
             android:exported="false" />
         <activity
-            android:name=".isesion"
+            android:name="com.unach.agromarket.isesion"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name="com.unach.agromarket.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

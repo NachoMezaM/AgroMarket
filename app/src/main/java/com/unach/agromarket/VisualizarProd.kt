@@ -11,8 +11,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.agromarket.MainComprador
-import com.example.agromarket.R
+import com.unach.agromarket.MainComprador
+import com.unach.agromarket.R
 import com.squareup.picasso.Picasso
 
 class VisualizarProd : AppCompatActivity() {

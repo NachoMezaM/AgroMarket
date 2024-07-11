@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.agromarket"
+    namespace = "com.unach.agromarket"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.agromarket"
+        applicationId = "com.unach.agromarket"
         minSdk = 30
         targetSdk = 34
         versionCode = 1

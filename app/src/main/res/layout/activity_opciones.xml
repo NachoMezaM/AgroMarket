@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="#CF2026"
     android:backgroundTint="#CF2026"
-    tools:context=".opciones">
+    tools:context="com.unach.agromarket.opciones">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
