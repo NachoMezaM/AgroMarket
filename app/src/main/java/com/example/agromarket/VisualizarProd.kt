@@ -32,7 +32,6 @@ class VisualizarProd : AppCompatActivity() {
         val precio = intent.getStringExtra("productPrice")
         val imageUrl = intent.getStringExtra("productImage")
         val correo = intent.getStringExtra("correo")
-        val correoseller = intent.getStringExtra("correoseller")
         //iniciar
         val productNameTextView = findViewById<TextView>(R.id.productNameV)
         val productDescriptionTextView = findViewById<TextView>(R.id.productDescriptionV)
@@ -45,6 +44,7 @@ class VisualizarProd : AppCompatActivity() {
         productNameTextView.text = nombre ?: "Nombre no disponible"
         productDescriptionTextView.text = descripcion ?: "Descripción no disponible"
         productPriceTextView.text = precio ?: "Precio no disponible"
+
         if (!imageUrl.isNullOrEmpty()) {
             Picasso.get().load(imageUrl).into(productImageView)
         }
@@ -54,20 +54,26 @@ class VisualizarProd : AppCompatActivity() {
             startActivity(intent)
         }
         comprar.setOnClickListener(){
-            solicitudcompra()
+            solicitudCompra()
         }
     }
-    private fun solicitudcompra() {
+    private fun solicitudCompra() {
         val productName = intent.getStringExtra("productName")
         val productDescription = intent.getStringExtra("productDescription")
         val productPrice = intent.getStringExtra("productPrice")
-        val sellerEmail = intent.getStringExtra("correoseller")
+        val sellerEmail = intent.getStringExtra("sellerEmail")?.replace(",",".") ?: ""
 
-        val intent = Intent(Intent.ACTION_SEND)
-        intent.type = "message/rfc822"
-        intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(sellerEmail))
-        intent.putExtra(Intent.EXTRA_SUBJECT, "Solicitud de compra para $productName")
-        intent.putExtra(Intent.EXTRA_TEXT, "Me gustaría comprar el producto: $productName\nDescripción: $productDescription\nPrecio: $productPrice")
+        if (sellerEmail.isEmpty()) {
+            Toast.makeText(this, "Correo del vendedor no disponible.", Toast.LENGTH_LONG).show()
+            return
+        }
+
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            type = "message/rfc822"
+            putExtra(Intent.EXTRA_EMAIL, arrayOf(sellerEmail))
+            putExtra(Intent.EXTRA_SUBJECT, "Solicitud de compra para $productName")
+            putExtra(Intent.EXTRA_TEXT, "Me gustaría comprar el producto: $productName\nDescripción: $productDescription\nPrecio: $productPrice")
+        }
 
         try {
             startActivity(Intent.createChooser(intent, "Enviar email..."))

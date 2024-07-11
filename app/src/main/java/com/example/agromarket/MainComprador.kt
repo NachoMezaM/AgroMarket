@@ -1,8 +1,11 @@
 package com.example.agromarket
 
+import agromarket.unach.VisualizarProd
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -19,9 +22,9 @@ import com.google.firebase.database.ValueEventListener
 import com.squareup.picasso.Picasso
 
 class MainComprador : AppCompatActivity() {
-    private lateinit var databaseprod: DatabaseReference
-    private lateinit var productoslay: LinearLayout
-
+    private lateinit var productsLayout: LinearLayout
+    private lateinit var database: DatabaseReference
+    private lateinit var correo: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -31,66 +34,69 @@ class MainComprador : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        productoslay = findViewById(R.id.productsLayOT)
-        databaseprod = FirebaseDatabase.getInstance().getReference("productos")
+        productsLayout = findViewById(R.id.productsLayOT)
+        database = FirebaseDatabase.getInstance().getReference("productos")
+        loadProducts()
+
     }
-    //buscar
-    private fun buscarProductos(correo: String) {
-        val userProductsRef = databaseprod.child(correo)
-        userProductsRef.addListenerForSingleValueEvent(object : ValueEventListener {
+    private fun loadProducts() {
+        database.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+                productsLayout.removeAllViews()  // Limpia el layout antes de agregar nuevos productos
+
                 if (snapshot.exists()) {
-                    for (productSnapshot in snapshot.children) {
-                        findViewById<ImageView>(R.id.sinprod).visibility = View.GONE
-                        val nombre = productSnapshot.child("Nombre").getValue(String::class.java)
-                        val precio = productSnapshot.child("Precio").getValue(String::class.java)
-                        val descripcion =
-                            productSnapshot.child("Descripcion").getValue(String::class.java)
-                        val imagen = productSnapshot.child("Imagen").getValue(String::class.java)
+                    // Itera sobre cada usuario (correo del vendedor)
+                    for (userSnapshot in snapshot.children) {
+                        val sellerEmail = userSnapshot.key  // Correo del vendedor es la clave del nodo
 
+                        // Itera sobre cada producto del vendedor
+                        for (productSnapshot in userSnapshot.children) {
+                            val nombre = productSnapshot.child("Nombre").getValue(String::class.java)
+                            val precio = productSnapshot.child("Precio").getValue(String::class.java)
+                            val descripcion = productSnapshot.child("Descripcion").getValue(String::class.java)
+                            val imageUrl = productSnapshot.child("Imagen").getValue(String::class.java) // Asumiendo que hay una imagen
 
-                        if (nombre != null && precio != null && descripcion != null && imagen != null) {
-                            agregarProducto(nombre, precio, descripcion, imagen)
+                            if (nombre != null && precio != null && descripcion != null) {
+                                // Inflate y población del view de producto
+                                val productView = LayoutInflater.from(this@MainComprador).inflate(R.layout.producto_mostrar, productsLayout, false)
+                                productView.findViewById<TextView>(R.id.productName).text = nombre
+                                productView.findViewById<TextView>(R.id.productDescription).text = descripcion
+                                productView.findViewById<TextView>(R.id.productPrice).text = precio
+                                val imageView = productView.findViewById<ImageView>(R.id.productImage)
+
+                                if (imageUrl != null) {
+                                    Picasso.get().load(imageUrl).into(imageView)
+                                }
+
+                                val productImageButton = productView.findViewById<ImageButton>(R.id.productBuy)
+                                productImageButton.setOnClickListener {
+                                    val intent = Intent(this@MainComprador, VisualizarProd::class.java)
+                                    intent.putExtra("productName", nombre)
+                                    intent.putExtra("productDescription", descripcion)
+                                    intent.putExtra("productPrice", precio)
+                                    intent.putExtra("productImage", imageUrl)
+                                    intent.putExtra("sellerEmail", sellerEmail)  // Pasa el correo del vendedor
+                                    intent.putExtra("correo", correo)
+                                    startActivity(intent)
+                                }
+
+                                productsLayout.addView(productView)
+                            }
                         }
                     }
                 } else {
-                    Toast.makeText(
-                        this@MainComprador,
-                        "No se encontraron productos",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    findViewById<ImageView>(R.id.sinprod).visibility = View.VISIBLE
-
+                    Toast.makeText(this@MainComprador, "No se encontraron productos", Toast.LENGTH_LONG).show()
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(
-                    this@MainComprador,
-                    "Error en la consulta: ${error.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(this@MainComprador, "Error en la consulta: ${error.message}", Toast.LENGTH_LONG).show()
             }
         })
     }
-    //Vista
-    private fun agregarProducto(nombre: String, precio: String, descripcion: String, imagen: String) {
-        val inflater = LayoutInflater.from(this)
-        val productoView = inflater.inflate(R.layout.producto_mostrar, productoslay, false)
 
-        val nombreTextView = productoView.findViewById<TextView>(R.id.nombreProductoTextView)
-        val precioTextView = productoView.findViewById<TextView>(R.id.precioProductoTextView)
-        val descripcionTextView = productoView.findViewById<TextView>(R.id.descripcionProductoTextView)
-        val imagenImageView = productoView.findViewById<ImageView>(R.id.imagenProductoImageView)
 
-        nombreTextView.text = nombre
-        precioTextView.text = precio
-        descripcionTextView.text = descripcion
-        Picasso.get().load(imagen).into(imagenImageView)
-        productoslay.addView(productoView)
-    }
 }
-
 
 
 
